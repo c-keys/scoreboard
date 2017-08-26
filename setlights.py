@@ -1,3 +1,4 @@
+import math
 import os
 import time
 
@@ -6,6 +7,7 @@ from lifxlan import LifxLAN
 K = 2500
 FULL = 65535
 LOW = 15000
+MAXSCORE = 25
 
 RED = (0, FULL, LOW, K)
 GREEN = (25000, FULL, LOW, K)
@@ -66,9 +68,13 @@ class SetLights():
             score = scorefile.read().strip()
         return int(score)
 
+    @staticmethod
+    def adjust_score(score, raw_max, scaled_max):
+        return math.floor((score / raw_max) * scaled_max)
+
     def main(self):
         original_gradient = self.make_gradient(RED, GREEN, self.zone_count)
-        score = self.check_score()
+        score = self.adjust_score(self.check_score(), MAXSCORE, self.zone_count)
         gradient = self.set_height(original_gradient, score, self.zone_count)
         self.light.set_zone_colors(gradient)
 
