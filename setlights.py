@@ -19,7 +19,8 @@ class SetLights():
         self.light = lan.get_multizone_lights()[0]
         self.zone_count = len(self.light.get_color_zones())
 
-    def make_gradient(self, start, end, steps):
+    @staticmethod
+    def make_gradient(start, end, steps):
         startH = start[0]
         startS = start[1]
         startV = start[2]
@@ -54,12 +55,14 @@ class SetLights():
             curK += stepK
         return outlist
 
-    def set_height(self, original, height, total):
+    @staticmethod
+    def set_height(original, height, total):
         for zone in range(height, total):
             original[zone] = OFF
         return original
 
-    def check_score(self):
+    @staticmethod
+    def check_score():
         basepath = os.path.expanduser('~/Downloads/')
         dircontents = os.scandir(basepath)
         most_recent = sorted(dircontents, key=lambda x: x.stat().st_mtime, reverse=True)
